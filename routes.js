@@ -1,4 +1,5 @@
 const express = require('express');
+const FuncionarioController = require('./controller/FuncionarioController');
 const LoginController = require('./controller/LoginController');
 
 const routes = express.Router();
@@ -15,5 +16,10 @@ routes.get('/auth',LoginController.verifyToken,(req,res)=>{
 
 routes.post('/login', LoginController.login);
 routes.post('/logout', LoginController.logout);
+
+
+routes.get('/funcionarios/lista', FuncionarioController.lista);
+routes.post('/funcionarios/get', FuncionarioController.get);
+routes.post('/funcionarios/adicionar', FuncionarioController.adicionar);
 
 module.exports=routes;
