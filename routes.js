@@ -16,6 +16,7 @@ routes.get('/auth',LoginController.verifyToken,(req,res)=>{
 
 routes.post('/login', LoginController.login);
 routes.post('/logout', LoginController.logout);
+routes.post('/register', LoginController.register);
 
 
 routes.get('/funcionarios/lista', FuncionarioController.lista);
