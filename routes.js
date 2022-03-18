@@ -1,6 +1,7 @@
 const express = require('express');
 const FuncionarioController = require('./controller/FuncionarioController');
 const LoginController = require('./controller/LoginController');
+const auth = require('./middleware/auth');
 
 const routes = express.Router();
 
@@ -10,8 +11,8 @@ routes.get('/',(req,res)=>{
 })
 
 
-routes.get('/auth',LoginController.verifyToken,(req,res)=>{
-    res.send('Aplicativo está funcionando com autenticação');
+routes.get('/auth',auth,(req,res)=>{
+    res.send(`Aplicativo está funcionando com autenticação. id: ${req.userId} - user: ${req.name}`);
 })
 
 routes.post('/login', LoginController.login);
