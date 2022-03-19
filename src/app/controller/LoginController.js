@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/User');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const mail = require('../../modules/mail');
+const { mainModule } = require('process');
 
 class LoginController {
     async register(req, res) {
@@ -47,6 +50,45 @@ class LoginController {
 
     logout(req, res) {
         return res.json({ auth: false, token: null });
+    }
+
+
+    async forgotPassword(req,res){
+        const {email} = req.body;
+
+        try {
+            const user = await userModel.findOne({email});
+
+            if(!user)
+                return res.status(400).send({message: 'Não foi possível encontrar o usuário'});
+
+            const token = crypto.randomBytes(20).toString('hex');
+
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+
+            await userModel.findByIdAndUpdate(user.id,{
+                '$set': {
+                    passwordResetToken: token,
+                    passwordResetExpires: now,
+                }
+            });
+
+            mail.sendMail({
+                to : email,
+                from : 'luizfelipeforcato@gmail.com',
+                template: 'passwordReset',
+                context: {token}
+            }, (err)=>{
+                if(err)
+                    return res.status(400).send({error: 'Erro ao recuperar senha, tente novamente'});
+                
+                return res.status(200).send();
+            });
+            
+        } catch (error) {
+            return res.status(400).send({error: 'Erro ao recuperar senha, tente novamente'});
+        }
     }
 
 }

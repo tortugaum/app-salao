@@ -1,7 +1,7 @@
 const express = require('express');
-const FuncionarioController = require('./controller/FuncionarioController');
-const LoginController = require('./controller/LoginController');
-const auth = require('./middleware/auth');
+const FuncionarioController = require('./src/app/controller/FuncionarioController');
+const LoginController = require('./src/app/controller/LoginController');
+const auth = require('./src/app/middleware/auth');
 
 const routes = express.Router();
 
@@ -18,6 +18,7 @@ routes.get('/auth',auth,(req,res)=>{
 routes.post('/login', LoginController.login);
 routes.post('/logout', LoginController.logout);
 routes.post('/register', LoginController.register);
+routes.post('/forgotPassword', LoginController.forgotPassword);
 
 
 routes.get('/funcionarios/lista', FuncionarioController.lista);
