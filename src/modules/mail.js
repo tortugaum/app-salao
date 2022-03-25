@@ -10,11 +10,17 @@ const transport = nodemailer.createTransport({
     auth: { user, pass}
 });
 
-transport.use('compile',hbs({
-    viewEngine: 'handlebars',
+
+const hbOptions = {
+    viewEngine: {
+        partialsDir: path.resolve('./src/resource/mail/'),
+        layoutsDir: path.resolve('./src/resource/mail/'),
+        defaultLayout : 'passwordReset.html',
+        extName: '.html',
+    },
     viewPath: path.resolve('./src/resource/mail/'),
     extName: '.html',
-    defaultLayout: null
-}));
+}
+transport.use('compile', hbs(hbOptions));
 
-module.exports = transport;
+module.exports = transport; 

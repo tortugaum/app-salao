@@ -19,6 +19,7 @@ routes.post('/login', LoginController.login);
 routes.post('/logout', LoginController.logout);
 routes.post('/register', LoginController.register);
 routes.post('/forgotPassword', LoginController.forgotPassword);
+routes.post('/resetPassword', LoginController.resetPassword);
 
 
 routes.get('/funcionarios/lista', FuncionarioController.lista);

@@ -91,6 +91,33 @@ class LoginController {
         }
     }
 
+    async resetPassword(req,res){
+        const {email, token, password} = req.body;
+
+        try {
+            const user = await userModel.findOne({email}).select('+passwordResetToken passwordResetExpires');
+
+            if(!user)
+                return res.status(400).send({message: 'Não foi possível encontrar o usuário'});
+
+            if(token !== user.passwordResetToken)
+            return res.status(400).send({message: 'Token Inválido'});
+
+            const now = new Date();
+            if(now > user.passwordResetExpires)
+                return res.status(400).send({message: 'Token Expirado. Gere um novo token'});
+
+
+            user.password = password;
+
+            await user.save();
+
+            res.send();
+            
+        } catch (error) {
+            return res.status(400).send({error: 'Erro ao recuperar senha, tente novamente'});
+        }
+    }
 }
 
 module.exports = new LoginController();
